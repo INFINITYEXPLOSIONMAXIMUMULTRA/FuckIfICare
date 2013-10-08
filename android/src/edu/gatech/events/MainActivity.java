@@ -1,4 +1,4 @@
-package com.example.mobile_events;
+package edu.gatech.events;
 
 import android.app.Activity;
 import android.os.Bundle;
