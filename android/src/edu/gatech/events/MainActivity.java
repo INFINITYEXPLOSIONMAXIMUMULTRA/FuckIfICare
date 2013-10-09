@@ -1,6 +1,7 @@
 package edu.gatech.events;
 
 import android.app.*;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import com.google.android.gms.common.ConnectionResult;
@@ -8,6 +9,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends Activity {
@@ -58,6 +60,13 @@ public class MainActivity extends Activity {
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
         map.addMarker(new MarkerOptions().position(new LatLng(33.773792, -84.398497)).title("Student Center").snippet("More fun that you can shake a stick at!"));
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent intent = new Intent(MainActivity.this, EventListActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
