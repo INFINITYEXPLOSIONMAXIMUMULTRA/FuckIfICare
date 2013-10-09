@@ -9,22 +9,22 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Build A Bear"
-            android:id="@+id/textView" android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:id="@+id/title" android:textAppearance="?android:attr/textAppearanceLarge"/>
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Tuesday, September 24th, 11am - 12pm"
-            android:id="@+id/textView2" android:paddingTop="3dp"/>
+            android:id="@+id/time" android:paddingTop="3dp"/>
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Student Center"
-            android:id="@+id/textView3" android:paddingTop="3dp"/>
+            android:id="@+id/location" android:paddingTop="3dp"/>
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Build a Bear workshop at the Student Center. Come create your own bear!"
-            android:id="@+id/textView1" android:paddingTop="3dp"/>
+            android:id="@+id/description" android:paddingTop="3dp"/>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"

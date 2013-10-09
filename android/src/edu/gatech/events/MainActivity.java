@@ -60,6 +60,10 @@ public class MainActivity extends Activity {
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
         map.addMarker(new MarkerOptions().position(new LatLng(33.773792, -84.398497)).title("Student Center").snippet("More fun that you can shake a stick at!"));
+        map.addMarker(new MarkerOptions().position(new LatLng(33.775322,-84.399114)).title("Ferst Center").snippet("Home of Drama Tech"));
+        map.addMarker(new MarkerOptions().position(new LatLng(33.775705, -84.404006)).title("Campus Recreation Center"));
+        map.addMarker(new MarkerOptions().position(new LatLng(33.772535,-84.392816)).title("Bobby Dood Stadium"));
+        map.addMarker(new MarkerOptions().position(new LatLng(33.780806,-84.392784)).title("McCamish Basketball Pavilion"));
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
