@@ -2,6 +2,7 @@ from flask import Flask,jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import *
+import json
 
 app = Flask(__name__)
 db = SQLAlchemy
@@ -14,11 +15,12 @@ session = Session()
 @app.route('/api/v1.0/location/nametocoordinates/<string:name>', methods=["GET"])
 def getCoordinates(name):
 	"""
-	Gives the user the latitude and longitude coordinates for the name of a building
-	Returns as a json blob consisting of the following fields:
-		name: The name that the user supplied
-		latitude: the latitude coordinates the user supplied
-		longitude: the longitude coordinates the user supplied
+		Gives the user the latitude and longitude coordinates for the name of a building
+		
+		Returns as a json blob consisting of the following fields:
+			name: The name that the user supplied
+			latitude: the latitude coordinates the user supplied
+			longitude: the longitude coordinates the user supplied
 	"""
 	res = session.query("name","lat_positive","lat_deg", \
 						"lat_min","lat_sec","lat_micro", \
@@ -28,7 +30,6 @@ def getCoordinates(name):
 							lat_sec,lat_micro,lon_positive,lon_deg,lon_min, \
 							lon_sec,lon_micro from location where name = :named").\
 		params(named = name).all()
-	#results = engine.execute("select * from location where name = %s",[name])
 	ret_dict = {}
 	latitude = ''
 	longitude = ''
@@ -77,15 +78,24 @@ def geteventswithinhour(lat, lon):
 	lon_seconds = lon[4:6]
 	lon_micro_seconds = lon[6:8]
 
+	results = session.query("id","name","event_name","start_time").from_statement("select l.id,l.name,e.event_name,e.start_time \
+						from location l \
+						inner join event e on l.id = e.lid and e.date = curdate() where lat_positive = true and \
+						(lat_sec+5) >= :latsec and (lat_sec-5) <= :latsec2 and \
+						(lon_sec+5)> :lonsec and (lon_sec-5)< :lonsec and \
+						(lon_micro+10)> :lonmicro and (lon_micro-10)< :lonmicro").\
+		params(latsec = lat_seconds,latsec2 = lat_seconds,lonsec = lon_seconds,lonmicro = lon_micro_seconds).all()
 
-	events = session.query("id","name","event_name").from_statement("select l.id,l.name,e.event_name from location l \
-							inner join event e on l.id = e.lid and e.date = curdate() where lat_positive = true and \
-							(lat_sec+5) >= :latsec and (lat_sec-5) <= :latsec2 and \
-							(lon_sec+5) > 78 and (lon_sec-5) < 78 and \
-							(lon_micro+10) > 100 and lon_micro - 10 < 100").\
-							params(latsec = lat_seconds,latsec2 = lat_seconds).all()
-
-	return str(events)
+	ret_dict = {}
+	events = []
+	for event_tuple in results:
+		temp = {}
+		temp['building_name'] = event_tuple[1]
+		temp['event_name'] = event_tuple[2]
+		temp['start_time'] = str(event_tuple[3])
+		events.append(temp)
+	ret_dict['events'] = events
+	return jsonify(ret_dict)#) + str(lon_micro_seconds)
 
 
 if __name__ == "__main__":
