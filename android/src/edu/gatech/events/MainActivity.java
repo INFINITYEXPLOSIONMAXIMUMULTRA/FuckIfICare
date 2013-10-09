@@ -2,7 +2,6 @@ package edu.gatech.events;
 
 import android.app.*;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -32,7 +31,6 @@ public class MainActivity extends Activity {
 
             @Override
             public boolean onNavigationItemSelected(int i, long l) {
-                Log.d("MainActivity", "Nav Item selected: " + i + ", " + l);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft;
                 switch (i) {
