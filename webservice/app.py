@@ -11,10 +11,6 @@ engine = create_engine("mysql+mysqldb://projectuser:projectmysqlUser@localhost:3
 Session = sessionmaker(bind = engine)
 session = Session()
 
-@app.route('/')
-def index():
-	return "Hello world"
-
 
 @app.route('/api/v1.0/location/nametocoordinates/<string:name>', methods=["GET"])
 def getCoordinates(name):
@@ -39,7 +35,7 @@ def geteventswithinhour(lat, lon):
 	lat_degrees = lat[:2]
 	lat_minutes = lat[2:4]
 	lat_seconds = int(lat[4:6])
-	lat_micro_seconds = lat[6:8]
+	lat_micro_seconds = int(lat[6:8])
 
 	if(lon[:1] == "-"):
 		lon = lon[:-8]
@@ -47,17 +43,16 @@ def geteventswithinhour(lat, lon):
 	lon_degrees = lon[2:4]
 	lon_seconds = lon[4:6]
 	lon_micro_seconds = lon[6:8]
-	#return type(lat_seconds)
-	a = session.query("*").from_statement("select * from location where lat_positive = true \
-							 and (lat_sec + 5) >= :lat \
-							 and (lat_sec - 5) <= 74 \
-							 and (lon_sec + 5) > 78 \
-							 and (lon_sec - 5) < 78 \
-							 and lon_micro + 10 > 100 \
-							 and lon_micro - 10 < 100")
-							.params(lat = lat_seconds).all()
 
-	return str(a.fetchall()) + "this shiz " + str(lat_seconds) #lat_degrees + lat_minutes + lat_seconds + lat_micro_seconds
+
+	events = session.query("l.id,l.name,e.event_name").from_statement("select l.id,l.name,e.event_name from location l \
+							inner join event e on l.id = e.lid and e.date = curdate() where lat_positive = true and \
+							(lat_sec + 5) >= :latsec and (lat_sec - 5) <= 74 and \
+							(lon_sec + 5) > 78 and (lon_sec - 5) < 78 and \
+							lon_micro + 10 > 100 and lon_micro - 10 < 100").\
+							params(latsec = lat_seconds).all()
+
+	return str(events)
 
 
 if __name__ == "__main__":
