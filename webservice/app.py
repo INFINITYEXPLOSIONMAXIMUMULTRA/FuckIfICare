@@ -13,7 +13,7 @@ session = Session()
 
 
 @app.route('/api/v1.0/location/nametocoordinates/<string:name>', methods=["GET"])
-def getCoordinates(name):
+def get_coordinates(name):
 	"""
 		Gives the user the latitude and longitude coordinates for the name of a building
 		
@@ -55,7 +55,7 @@ def getCoordinates(name):
 	return jsonify(ret_dict)
 
 @app.route('/api/v1.0/location/getevents/latitude/<string:lat>/longitude/<string:lon>', methods=['GET'])
-def geteventswithinhour(lat, lon):
+def get_events_within_hour(lat, lon):
 	"""
 		Returns a list of events that are occurring close to the user's current location
 		within 3 hours.
@@ -95,7 +95,35 @@ def geteventswithinhour(lat, lon):
 		temp['start_time'] = str(event_tuple[3])
 		events.append(temp)
 	ret_dict['events'] = events
-	return jsonify(ret_dict)#) + str(lon_micro_seconds)
+	return jsonify(ret_dict)
+
+@app.route('/api/v1.0/location/geteventsfornexthours/<int:hours>', methods=['GET'])
+def get_events_for_next_hours(hours):
+	"""
+		Returns all of the events for the next <hours> number of hours
+
+		@Param hours: the number of hours into the future to search for events for
+		@return json blob with following fields:
+			events: array of json objects consisting of
+				event_name: the name of the event
+				start_date: the date of the event
+				start_time: the time when the event starts
+	"""
+	results = session.query("event_name","date","start_time").\
+	from_statement("select event_name,date,start_time \
+			from event where date = curdate() and timediff(start_time,now())< :numhours").\
+	params(numhours = int(hours)).all()
+	#return str(results)
+	ret_dict = {}
+	events = []
+	for event_tuple in results:
+		temp = {}
+		temp['event_name'] = event_tuple[0]
+		temp['start_date'] = str(event_tuple[1])
+		temp['start_time'] = str(event_tuple[2])
+		events.append(temp)
+	ret_dict['events'] = events
+	return jsonify(ret_dict)
 
 
 if __name__ == "__main__":
