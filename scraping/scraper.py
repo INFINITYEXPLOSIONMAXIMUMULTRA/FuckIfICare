@@ -40,7 +40,6 @@ def convert_time_to_timestamp_format(timeam):
 
 	return hour+":"+minute+":00"
 
-
 def process_time(times):
 	times = times[2:]
 	start_time = times[:times.find('to')]
@@ -57,8 +56,17 @@ def insert_into_database(event_name,date,start_time,end_time):
 	if len(results) == 0:#event hasn't been added)
 		connection.execute("""insert into event (event_name,date,start_time,end_time) values (%s,%s,%s,%s);""",event_name,str(date),start_time,end_time)
 	print results
-	print "shit"
 	
+def process_date(date):
+	""" Will process the date from the scraped format to mysql format"""
+	month = date[:date.find('-')]
+	date = date[date.find('-')+1:]
+	day = date[:date.find('-')]
+	date = date[date.find('-')+1:]
+	year = date
+	return year+'-'+month+'-'+day
+
+
 
 
 user_agent = "Mozilla/5 (Solaris 10) Gecko"
@@ -99,6 +107,7 @@ for result in results:
 		times = date[date.find(' '):]#start and end times are after the date
 		start_time,end_time = process_time(times)
 		date = date[:date.find(' ')]#the date part required is before the space
+		date = process_date(date)
 
 	except AttributeError:
 		pass#I really don't want to do anything here
