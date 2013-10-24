@@ -125,6 +125,78 @@ def get_events_for_next_hours(hours):
 	ret_dict['events'] = events
 	return jsonify(ret_dict)
 
+@app.route('/api/v1.0/location/eventsforspecifichours/<string:start>/<string:end>', methods=['GET'])
+def get_events_for_specific_hours(start,end):
+	"""
+		Queries and returns events which fall in between the starting and end times.
+
+		@param start The start time for the event.  the format is HH:MM:SS
+		@param end The end time for the event.  The format is HH:MM:SS
+
+		@return a json blob with the following fields
+
+		events: an array of json objects with the fields
+			event_name: the name of the event
+			start_date: the start date of the event
+			start_time: the start time of the event
+			end_time: the end time of the event
+			location_name: the name of the location for the event not implemented yet
+	"""
+	results = session.query("event_name","date","start_time","end_time").\
+	from_statement("select event_name,date,start_time,end_time from event where date=curdate() and   \
+		start_time >= :starttime and end_time <= :endtime").\
+	params(starttime = start, endtime = end).all()
+	if(len(results) > 0):
+		ret_dict = {}
+		events = []
+
+		for event_tuple in results:
+			temp = {}
+			temp['event_name'] = event_tuple[0]
+			temp['start_date'] = str(event_tuple[1])
+			temp['start_time'] = str(event_tuple[2])
+			temp['end_time'] = str(event_tuple[3])
+			events.append(temp)
+
+		ret_dict['events'] = events
+		return jsonify(ret_dict)
+	else:
+		return "{'events':'no results returned'}"
+
+@app.route('/api/v1.0/location/eventsfordate/<string:date>')
+def get_events_for_date(date):
+	results = session.query("event_name","date","start_time","end_time").\
+	from_statement("select event_name,date from event where date = :eventdate").\
+	params(eventdate = date).all()
+
+	ret_dict = {}
+	events = []
+
+	for event_tuple in results:
+		temp = {}
+		temp['event_name'] = event_tuple[0]
+		temp['event_date'] = str(event_tuple[1])
+		events.append(temp)
+
+	ret_dict['events'] = events
+	return jsonify(ret_dict)
+
+@app.route('/api/v1.0/location/getlocations')
+def get_locations():
+	results = session.query("name").\
+	from_statement("select name from location").params().all()
+
+	ret_dict = {}
+	events = []
+
+	for location in results:
+		events.append(location[0])
+	ret_dict['locations'] = events
+	return jsonify(ret_dict)
+
 
 if __name__ == "__main__":
 	app.run(debug=True)
+
+##todo webservice call to dump all location names
+##all events within certain time frames
