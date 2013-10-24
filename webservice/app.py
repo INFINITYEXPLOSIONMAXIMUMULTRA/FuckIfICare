@@ -110,8 +110,8 @@ def get_events_for_next_hours(hours):
 				start_time: the time when the event starts
 	"""
 	results = session.query("event_name","date","start_time").\
-	from_statement("select event_name,date,start_time \
-			from event where date = curdate() and timediff(start_time,now())< :numhours").\
+	from_statement("select event_name,date,start_time from event where timestampdiff(HOUR,now(),concat(date,' ',start_time))>0 and \
+	 timestampdiff(HOUR,now(),concat(date,' ',start_time)) < :numhours").\
 	params(numhours = int(hours)).all()
 	#return str(results)
 	ret_dict = {}
