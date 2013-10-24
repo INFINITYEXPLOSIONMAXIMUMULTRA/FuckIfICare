@@ -47,7 +47,7 @@
                   <ul class="dropdown-menu">
 		  <?php
 			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/getlocations");
+			curl_setopt($curl, CURLOPT_URL,"http://localhost:5000/api/v1.0/location/getlocations");
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 			$json = curl_exec($curl);
 			curl_close($curl); 
@@ -84,15 +84,19 @@
         <ul class="nav nav-pills nav-stacked">
           <?php
           $curl = curl_init();
-          curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/24");
+          curl_setopt($curl, CURLOPT_URL,"http://localhost:5000/api/v1.0/location/geteventsfornexthours/12");
           curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
           $json = curl_exec($curl);
           curl_close($curl); 
           $jsonobj = json_decode($json);
-          die(var_dump($jsonobj));
-          $locations = $jsonobj->locations;
-          foreach($locations as $location){
-            print "<li><a href=\"#\">".$location."</a></li>";
+          $jsonobj->events = array_slice($jsonobj->events,0,3);
+
+          foreach($jsonobj->events as $event) {
+            print "<li><a href=\"#\"><div>";
+            print $event->event_name;
+            print "</div>"; 
+            print $event->start_date.' '.$event->start_time;
+            print "</a></li>";
           }
         ?>
         </ul>
