@@ -6,11 +6,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.png">
-
     <script type="text/javascript"
           src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
      </script>
-
     <title>GT Campus Events</title>
 
     <!-- Bootstrap core CSS -->
@@ -31,7 +29,6 @@
   <body>
     <div class="navbar-wrapper">
       <div class="container">
-
         <div class="navbar navbar-inverse navbar-static-top">
           <div class="container">
             <div class="navbar-header">
@@ -48,13 +45,18 @@
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Locations<b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Student Center</a></li>
-                    <li><a href="#">CRC</a></li>
-                    <li><a href="#">Barnes & Noble</a></li>
-                    <!--<li class="divider"></li>
-                    <li class="dropdown-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>-->
+		  <?php
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/getlocations");
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			$json = curl_exec($curl);
+			curl_close($curl); 
+			$jsonobj = json_decode($json);
+			$locations = $jsonobj->locations;
+			foreach($locations as $location){
+				print "<li><a href=\"#\">".$location."</a></li>";
+			}
+		  ?>
                   </ul>
                 </li>
                 <li><a href="#events">Upcoming Events</a></li>
@@ -62,14 +64,10 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
 <!--Google Map with Markers-->
-
     <div class="google-map-canvas" id="map-canvas"> </div>
-
 <!--List of Upcoming Events by Time Frame-->
 
   <div class="container">
@@ -84,37 +82,19 @@
       <div class="col-lg-4">
         <h2>Today</h2>
         <ul class="nav nav-pills nav-stacked">
-          
-          <!--<?php
-            $ts = strtotime(date("d-m-Y"));
-            $start = date('m-d-Y', $ts);
-            $end = date('m-d-Y', strtotime('+1 day', $ts));
-            $result = db_select_events_range($start, $end);
-            $i = 0;
-            while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-              if (!array_key_exists($row['ID'], $tasks_shown))
-              {
-                ?>
-                <li><a href="http://gtcampusevents.com/event/<?=$row['EVENT_NUM'];?>"><?=$row['DESC'];?> on <?=$row['EVENT_NUM'];?></a></li>
-                <?php
-                $i++;
-              }
-              else
-              {
-                $tasks_shown[$row['ID']] = true;
-              }
-            }
-            if ($i == 0)
-            {
-              ?>
-              <li><a href="#"><?=l("NO_TODAY_EVENTS");?></a></li>
-              <?
-            }
-          ?>-->
-
-          <li>Event 1</li>
-          <li>Event 2</li>
-          <li>Event 3</li>
+          <?php
+          $curl = curl_init();
+          curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/24");
+          curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+          $json = curl_exec($curl);
+          curl_close($curl); 
+          $jsonobj = json_decode($json);
+          die(var_dump($jsonobj));
+          $locations = $jsonobj->locations;
+          foreach($locations as $location){
+            print "<li><a href=\"#\">".$location."</a></li>";
+          }
+        ?>
         </ul>
       </div>
       <div class="col-lg-4">
