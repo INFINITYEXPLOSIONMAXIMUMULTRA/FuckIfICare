@@ -18,6 +18,10 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AllEventsFragment extends ListFragment {
 	
 	String webServiceResults;
@@ -25,22 +29,11 @@ public class AllEventsFragment extends ListFragment {
     List<Event> events;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-    	new WebserviceManager().execute("http://wesley-crusher.firba1.com:8080/api/v1.0/location/getlocations");
+    	new WebserviceManager().execute("http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/12");
         super.onActivityCreated(savedInstanceState);
         events = new ArrayList<Event>();
-        //all static data rest gets populated in postExecute
-        events.add(new Event("Build a Bear", "Tuesday 11:00 AM", "", ""));
-        events.add(new Event("Get Artsy", "Friday 11:00 AM", "", ""));
-        events.add(new Event("Take a Professor to Lunch", "October 8th 11:00 AM", "", ""));
-        events.add(new Event("Tenative Game Show Night", "October 10th 7:00 PM", "", ""));
-        events.add(new Event("Pumpkin Carving", "October 17th 2:00 PM", "", ""));
-        events.add(new Event("Netherworld", "October 17th 7:00 PM", "", ""));
-        events.add(new Event("General Member Meeting", "October 22nd 6:00 PM", "", ""));
-        events.add(new Event("Homecoming Concert", "October 31st 8:00 PM", "", ""));
-        events.add(new Event("Hip Hop Dance Class", "November 7th 7:00 PM", "", ""));
-        events.add(new Event("General Member Meeting", "November 19th 6:00 PM", "", ""));
-        events.add(new Event("Tentative Game Show Night", "November 21st 8:00 PM", "", ""));
-        
+        //the rest of the data is populated in the AsyncTask class specifically
+        //in the onPostExecute function
     }
 
     @Override
@@ -69,7 +62,20 @@ public class AllEventsFragment extends ListFragment {
 		@Override
     	protected void onPostExecute(String result){
     		webServiceResults = result;
-    		events.add(new Event(webServiceResults,"aaaaaaa","",""));
+    		try {
+				JSONObject json = new JSONObject(result);
+				JSONArray eventArray = json.getJSONArray("events");
+				for(int i=0;i<eventArray.length();i++){
+					JSONObject temp = (JSONObject) eventArray.get(i);
+					Event tempEvent = new Event();
+					tempEvent.title = temp.getString("event_name");
+					tempEvent.time = temp.getString("start_date");
+					events.add(tempEvent);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+    		//events.add(new Event(webServiceResults,"aaaaaaa","",""));
             setListAdapter(new EventListAdapter(getActivity(), events));
     	}
 		
