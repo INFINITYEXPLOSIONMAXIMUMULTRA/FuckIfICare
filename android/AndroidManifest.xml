@@ -28,6 +28,7 @@
         </activity>
         <activity android:name=".EventListActivity"/>
         <activity android:name=".EventDetailActivity"/>
+        <service android:name=".GeofenceIntentService"></service>
 	<meta-data
 		android:name="com.google.android.maps.v2.API_KEY"
 		android:value="AIzaSyAJHPterFhd0R7qc5wl_tmW81NGIDhxroI"
