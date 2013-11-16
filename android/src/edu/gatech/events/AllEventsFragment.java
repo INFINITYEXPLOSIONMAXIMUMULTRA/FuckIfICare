@@ -32,6 +32,7 @@ public class AllEventsFragment extends ListFragment {
     	new WebserviceManager().execute("http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/12");
         super.onActivityCreated(savedInstanceState);
         events = new ArrayList<Event>();
+        events.add(new Event("Build a Bear", "Tuesday 11:00 AM", "", ""));
         //the rest of the data is populated in the AsyncTask class specifically
         //in the onPostExecute function
     }
@@ -40,14 +41,19 @@ public class AllEventsFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(getActivity(), EventDetailActivity.class);
         intent.putExtra("Event", events.get(position));
-        startActivity(intent);
+        startActivity(intent);//starts the eventdetailactivity activity
     }
     
+    /**
+     * Class to handle the asychronous nature of making a network call through 
+     * an android application.  Will populate a list full of items after it returns.
+     * @author Alex
+     */
 	private class WebserviceManager extends AsyncTask<String, Void, String> {
     	@Override
     	protected String doInBackground(String... params){
     		try{
-    			return downloadUrl(params[0]);
+    			return downloadUrl(params[0]);//will make a web service call
     		} 	
     		catch(IOException e){
     			Log.d("Webservice-connect","downloadUrl failed"+e.getMessage());
@@ -57,7 +63,8 @@ public class AllEventsFragment extends ListFragment {
     	}
 
     	/**
-    	 * Overrides the onPostExecute function for AsyncTask so that we can 
+    	 * Overrides the onPostExecute function for AsyncTask so that we can populate the list after
+    	 * the web service call returns. Executes after the doInBackground function executes.
     	 */
 		@Override
     	protected void onPostExecute(String result){
@@ -75,10 +82,15 @@ public class AllEventsFragment extends ListFragment {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-    		//events.add(new Event(webServiceResults,"aaaaaaa","",""));
             setListAdapter(new EventListAdapter(getActivity(), events));
     	}
 		
+		/**
+		 * Downloads the contents of a url with an http request.
+		 * @param url the string representation of the url to 
+		 * @return
+		 * @throws IOException
+		 */
 		public String downloadUrl(String url) throws IOException {
 			InputStream inStream = null;
 			try {
