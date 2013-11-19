@@ -5,4 +5,5 @@
         <item>Time</item>
         <item>Location</item>
     </string-array>
+    <string name="news">this is a menu</string>
 </resources>
