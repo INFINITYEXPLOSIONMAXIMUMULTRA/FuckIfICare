@@ -3,6 +3,8 @@ package edu.gatech.events;
 import android.app.*;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.ArrayAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -101,5 +103,18 @@ public class MainActivity extends Activity {
                 //TODO display error dialog
             }
         }
+    }
+    
+    /**
+     * Adds an option menu to this activitiy.  I am going to use it 
+     * eventually to allow the user to filter events by date.
+     * 
+     * The menu is stored under res/values/settings_menu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.settings_menu, menu);//settings_menu has an xml file defining it.
+    	return true;
     }
 }
