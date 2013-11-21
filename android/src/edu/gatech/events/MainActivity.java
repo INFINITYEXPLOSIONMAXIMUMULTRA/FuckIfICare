@@ -1,10 +1,12 @@
 package edu.gatech.events;
 
+//import android.R;
 import android.app.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -116,5 +118,20 @@ public class MainActivity extends Activity {
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.settings_menu, menu);//settings_menu has an xml file defining it.
     	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	//handles when the user selects an item from the option menu.
+    	switch(item.getItemId()){
+    	case R.id.resultFilterID:
+    		//starts the settings activity
+    		Intent settingIntent = new Intent(this,SettingsActivity.class);
+    		startActivity(settingIntent);
+    		return true;
+    	default:
+    		return true;
+    	}
+    	//return true;
     }
 }
