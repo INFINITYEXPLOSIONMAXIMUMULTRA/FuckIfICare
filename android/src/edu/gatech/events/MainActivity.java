@@ -120,18 +120,20 @@ public class MainActivity extends Activity {
     	return true;
     }
     
+    /**
+     * Handles which options from the option menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	//handles when the user selects an item from the option menu.
     	switch(item.getItemId()){
     	case R.id.resultFilterID:
-    		//starts the settings activity
+    		//starts the settings activity because the user clicked on the filter results option
     		Intent settingIntent = new Intent(this,SettingsActivity.class);
     		startActivity(settingIntent);
     		return true;
     	default:
     		return true;
     	}
-    	//return true;
     }
 }

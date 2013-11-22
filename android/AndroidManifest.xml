@@ -3,7 +3,7 @@
           package="edu.gatech.events"
           android:versionCode="1"
           android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".EventListActivity"/>
         <activity android:name=".EventDetailActivity"/>
         <service android:name=".GeofenceIntentService"></service>
