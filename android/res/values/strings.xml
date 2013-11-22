@@ -5,4 +5,7 @@
         <item>Time</item>
         <item>Location</item>
     </string-array>
+    <string name="resultFilter">Filter Results</string>
+    <string name="settingsNextHours">Show events for next hours</string>
+    <string name="seekBarDefault">0</string>
 </resources>

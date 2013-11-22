@@ -1,16 +1,24 @@
 package edu.gatech.events;
 
+//import android.R;
 import android.app.*;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -27,6 +35,16 @@ public class MainActivity extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+        GeofenceHandler handler = new GeofenceHandler(this);
+        List<Geofence> geofenceList = new ArrayList<Geofence>();
+        Geofence.Builder geofenceBuilder = new Geofence.Builder();
+        geofenceBuilder.setRequestId("College of Business");
+        geofenceBuilder.setCircularRegion(33.777152,-84.391853, 200);
+        geofenceBuilder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
+        geofenceBuilder.setExpirationDuration(Geofence.NEVER_EXPIRE);
+        geofenceList.add(geofenceBuilder.build());
+        handler.addGeofences(geofenceList);
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.event_view_list, android.R.layout.simple_spinner_dropdown_item);
         actionBar.setListNavigationCallbacks(spinnerAdapter, new ActionBar.OnNavigationListener() {
@@ -59,7 +77,7 @@ public class MainActivity extends Activity {
         eventsFragment = (AllEventsFragment) getFragmentManager().findFragmentById(R.id.events);
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
-        map.addMarker(new MarkerOptions().position(new LatLng(33.773792, -84.398497)).title("Student Center").snippet("More fun that you can shake a stick at!"));
+        final Marker studentCenter = map.addMarker(new MarkerOptions().position(new LatLng(33.773792, -84.398497)).title("Student Center").snippet("More fun that you can shake a stick at!"));
         map.addMarker(new MarkerOptions().position(new LatLng(33.775322,-84.399114)).title("Ferst Center").snippet("Home of Drama Tech"));
         map.addMarker(new MarkerOptions().position(new LatLng(33.775705, -84.404006)).title("Campus Recreation Center"));
         map.addMarker(new MarkerOptions().position(new LatLng(33.772535,-84.392816)).title("Bobby Dood Stadium"));
@@ -67,8 +85,10 @@ public class MainActivity extends Activity {
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(MainActivity.this, EventListActivity.class);
-                startActivity(intent);
+                if (marker.equals(studentCenter)) {
+                    Intent intent = new Intent(MainActivity.this, EventListActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -79,7 +99,41 @@ public class MainActivity extends Activity {
         super.onResume();
         int result = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (result != ConnectionResult.SUCCESS) {
-            GooglePlayServicesUtil.getErrorDialog(result, this, result);
+            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(result, this, 0);
+
+            if (errorDialog != null) {
+                //TODO display error dialog
+            }
         }
+    }
+    
+    /**
+     * Adds an option menu to this activitiy.  I am going to use it 
+     * eventually to allow the user to filter events by date.
+     * 
+     * The menu is stored under res/values/settings_menu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.settings_menu, menu);//settings_menu has an xml file defining it.
+    	return true;
+    }
+    
+    /**
+     * Handles which options from the option menu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	//handles when the user selects an item from the option menu.
+    	switch(item.getItemId()){
+    	case R.id.resultFilterID:
+    		//starts the settings activity because the user clicked on the filter results option
+    		Intent settingIntent = new Intent(this,SettingsActivity.class);
+    		startActivity(settingIntent);
+    		return true;
+    	default:
+    		return true;
+    	}
     }
 }
