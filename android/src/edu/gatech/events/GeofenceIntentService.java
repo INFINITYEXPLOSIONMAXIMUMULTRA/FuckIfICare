@@ -99,10 +99,10 @@ public class GeofenceIntentService extends IntentService {
 
             builder.setSmallIcon(R.drawable.stat_notify_chat);
             builder.setContentTitle(event.title);
-            builder.setContentText(event.location.name);
+            builder.setContentText(event.location);
             builder.setContentIntent(notificationPendingIntent);
             builder.setAutoCancel(true);
-            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(event.description + "\n\n" + event.location));
+            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(event.location));
             Intent calendarIntent = null;
             calendarIntent = new Intent(Intent.ACTION_INSERT);
             calendarIntent.setData(CalendarContract.Events.CONTENT_URI);
@@ -114,7 +114,7 @@ public class GeofenceIntentService extends IntentService {
             builder.addAction(R.drawable.stat_notify_error, "Add to Calendar", calendarPI);
             Intent directionsIntent = null;
             try {
-                directionsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.ENGLISH, "geo:0,0?q=%s", URLEncoder.encode(event.location.name, "UTF-8"))));
+                directionsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.ENGLISH, "geo:0,0?q=%s", URLEncoder.encode(event.getAddress(), "UTF-8"))));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }

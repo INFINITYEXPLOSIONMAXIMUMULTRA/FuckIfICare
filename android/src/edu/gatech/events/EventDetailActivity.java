@@ -32,7 +32,7 @@ public class EventDetailActivity extends Activity {
         TextView time = (TextView) findViewById(R.id.time);
         time.setText(event.time.toString());
         TextView location = (TextView) findViewById(R.id.location);
-        location.setText(event.location.name);
+        location.setText(event.location);
         TextView description = (TextView) findViewById(R.id.description);
         description.setText(event.description);
         
@@ -50,7 +50,7 @@ public class EventDetailActivity extends Activity {
 				Intent startCalendarIntent = new Intent(Intent.ACTION_INSERT);
 				startCalendarIntent.setType("vnd.android.cursor.item/event");
 				startCalendarIntent.putExtra(Events.TITLE, event.title);
-				startCalendarIntent.putExtra(Events.EVENT_LOCATION, event.location.name);
+				startCalendarIntent.putExtra(Events.EVENT_LOCATION, event.location);
 				startActivity(startCalendarIntent);
 				//TODO add the starting date to the calendar
 			}
@@ -62,7 +62,7 @@ public class EventDetailActivity extends Activity {
             public void onClick(View view) {
                 Intent directionsIntent = null;
                 try {
-                    directionsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.ENGLISH, "geo:0,0?q=%s", URLEncoder.encode(event.location.name, "UTF-8"))));
+                    directionsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.ENGLISH, "geo:0,0?q=%s", URLEncoder.encode(event.getAddress(), "UTF-8"))));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
