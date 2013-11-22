@@ -195,8 +195,25 @@ def get_locations():
 	return jsonify(ret_dict)
 
 @app.route('/api/v1.0/location/geteventbylocation/<string:location>')
-def get_event_by_location():
-	pass
+def get_event_by_location(location):
+	results = session.query("event_name","date","start_time","end_time","name").\
+	from_statement("select e.event_name,e.date,e.start_time,e.end_time,l.name from event e left join  \
+		location l on l.id=e.lid where l.name= :loc").params(loc = location).all()
+
+	ret_dict = {}
+	events = []
+	for location in results:
+		temp = {}
+		temp['event_name'] = location[0]#location is a tuple
+		temp['start_date'] = str(location[1])
+		temp['start_time'] = str(location[2])
+		temp['end_time'] = str(location[3])
+		temp['building'] = str(location[4])
+		events.append(temp)
+
+	ret_dict['events'] = events
+
+	return jsonify(ret_dict)
 	#add description
 	#building
 
