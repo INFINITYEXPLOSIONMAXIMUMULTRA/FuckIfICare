@@ -39,9 +39,15 @@ public class MainActivity extends Activity {
         GeofenceHandler handler = new GeofenceHandler(this);
         List<Geofence> geofenceList = new ArrayList<Geofence>();
         Geofence.Builder geofenceBuilder = new Geofence.Builder();
-        geofenceBuilder.setRequestId("College of Business");
-        geofenceBuilder.setCircularRegion(33.777152,-84.391853, 200);
-        geofenceBuilder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
+        geofenceBuilder.setRequestId("Phi Sigma Kappa");
+        geofenceBuilder.setCircularRegion(33.777152, -84.391853, 200);
+        geofenceBuilder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER);
+        geofenceBuilder.setExpirationDuration(Geofence.NEVER_EXPIRE);
+        geofenceList.add(geofenceBuilder.build());
+        geofenceBuilder = new Geofence.Builder();
+        geofenceBuilder.setRequestId("College of Computing");
+        geofenceBuilder.setCircularRegion(33.777417, -84.397318, 200);
+        geofenceBuilder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER);
         geofenceBuilder.setExpirationDuration(Geofence.NEVER_EXPIRE);
         geofenceList.add(geofenceBuilder.build());
         handler.addGeofences(geofenceList);
