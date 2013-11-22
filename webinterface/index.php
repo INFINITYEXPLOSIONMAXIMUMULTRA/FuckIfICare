@@ -143,14 +143,19 @@
           $json = curl_exec($curl);
           curl_close($curl); 
           $jsonobj = json_decode($json);
-          $jsonobj->events = array_slice($jsonobj->events,0,3);
+          $jsonobj->events = array_slice($jsonobj->events,0,5);
 
-          foreach($jsonobj->events as $event) {
-            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
-            print $event->event_name;
-            print "</div>"; 
-            print $event->start_date.' '.$event->start_time;
-            print "</a></li>";
+          if($jsonobj->events) {
+            foreach($jsonobj->events as $event) {
+              print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
+              print $event->event_name;
+              print "</div>"; 
+              print $event->start_date.' '.$event->start_time;
+              print "</a></li>";
+            }
+          }
+          else {
+            print "<li>No upcoming events</li>";
           }
         ?>
         </ul>
@@ -165,15 +170,20 @@
           $json = curl_exec($curl);
           curl_close($curl); 
           $jsonobj = json_decode($json);
-          $jsonobj->events = array_slice($jsonobj->events,0,3);
+          $jsonobj->events = array_slice($jsonobj->events,0,5);
 
-          foreach($jsonobj->events as $event) {
-            $eventobj = json_encode($event);
-            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
-            print $event->event_name;
-            print "</div>"; 
-            print $event->start_date.' '.$event->start_time;
-            print "</a></li>";
+          if($jsonobj->events) {
+            foreach($jsonobj->events as $event) {
+              $eventobj = json_encode($event);
+              print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
+              print $event->event_name;
+              print "</div>"; 
+              print $event->start_date.' '.$event->start_time;
+              print "</a></li>";
+            }
+          }
+          else {
+            print "<li>No upcoming events</li>";
           }
         ?>
         </ul>
@@ -188,14 +198,19 @@
           $json = curl_exec($curl);
           curl_close($curl); 
           $jsonobj = json_decode($json);
-          $jsonobj->events = array_slice($jsonobj->events,0,3);
+          $jsonobj->events = array_slice($jsonobj->events,0,5);
 
-          foreach($jsonobj->events as $event) {
-            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
-            print $event->event_name;
-            print "</div>"; 
-            print $event->start_date.' '.$event->start_time;
-            print "</a></li>";
+          if($jsonobj->events) {
+            foreach($jsonobj->events as $event) {
+              print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
+              print $event->event_name;
+              print "</div>"; 
+              print $event->start_date.' '.$event->start_time;
+              print "</a></li>";
+            }
+          }
+          else {
+            print "<li>No upcoming events</li>";
           }
         ?>
         </ul>

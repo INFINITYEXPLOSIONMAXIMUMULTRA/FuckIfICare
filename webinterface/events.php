@@ -75,11 +75,9 @@
   <div class = "container">
     <div class="row">
       <div class="col-lg-12">
-        <a name="events">
           <?php
           	$eventName = htmlspecialchars($_GET['event']);
-          	print "<h1>" . $eventName . "</h1>"; ?>
-        </a>
+          	print "<h3>" . $eventName . "</h3>"; ?>
       </div>
     </div>
     <div class="row">

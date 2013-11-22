@@ -85,36 +85,45 @@
         <!--<h2>Today</h2>-->
         <ul class="nav nav-pills nav-stacked">
 
+          <li>-</li>
+
           <?php
-            /*$curl = curl_init();
+            $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventbylocation/" . rawurlencode($currentLocation));
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             $json = curl_exec($curl);
             curl_close($curl); 
             $jsonobj = json_decode($json);
             $locations = $jsonobj->locations;
-            foreach($event_name as $event_names){
-              print "<li><a href=\"./locations.php?location=$location\">".$location."</a></li>";
-            }*/
+            $jsonobj->events = array_slice($jsonobj->events,0,5);
+            if($jsonobj->events) {
+              foreach($jsonobj->events as $event){
+              print "<li><strong>Event: </strong>" . $event->event_name . "</li>";
+              print "<li><strong>Date: </strong>" . $event->start_date . " from " . $event->start_time . " to " .$event->end_time . "</li>";
+              } 
+            }
+            else {
+              print "<li>No upcoming events at " . $currentLocation . "</li>";
+            }
           ?>
 
-          <li>-</li>
+          
 
           <?php
-            $curl = curl_init();
+            /*$curl = curl_init();
             curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/72");//geteventbylocation/" . rawurlencode($currentLocation));
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             $json = curl_exec($curl);
             curl_close($curl); 
             $jsonobj = json_decode($json);
-            $jsonobj->events = array_slice($jsonobj->events,0,3);
+            $jsonobj->events = array_slice($jsonobj->events,0,5);
 
             foreach($jsonobj->events as $event) {
               $eventobj = json_encode($event);
               print "<li><strong>Event: </strong>" . $event->event_name . "</li>";
               print "<li><strong>Date: </strong>" . $event->start_date . " at " . $event->start_time . "</li>";
               //print "</a></li>";
-            }
+            }*/
           ?>
 
         </ul>
