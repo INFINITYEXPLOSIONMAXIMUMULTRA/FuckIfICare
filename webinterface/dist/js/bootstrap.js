@@ -489,7 +489,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
 
   /* Google Maps Integration */
 
-  function initialize() {
+  /*function initialize() {
             var mapOptions = {
               scrollwheel: false,
               center: new google.maps.LatLng(33.777142, -84.397582),
@@ -516,7 +516,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
             });
 
           }
-          google.maps.event.addDomListener(window, 'load', initialize);
+          google.maps.event.addDomListener(window, 'load', initialize);*/
 
   /* End Google Maps Integration */
 

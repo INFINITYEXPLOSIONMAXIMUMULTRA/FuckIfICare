@@ -4,33 +4,14 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <SeekBar
-        android:id="@+id/hoursSeekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="21dp"
-        android:max="24" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/hoursSeekBar"
-        android:orientation="vertical" >
-    </LinearLayout>
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="27dp"
         android:text="@string/settingsNextHours"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/numHours"
@@ -41,5 +22,20 @@
         android:layout_toRightOf="@+id/textView1"
         android:text="@string/seekBarDefault"
         android:textSize="18sp" />
+
+    <SeekBar
+        android:id="@+id/hoursSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="24"
+        android:layout_below="@+id/textView1"
+        android:layout_alignParentLeft="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notifWhenBusyText"
+        android:id="@+id/checkBox"
+        android:layout_below="@+id/hoursSeekBar" />
 
 </RelativeLayout>
