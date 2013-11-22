@@ -1,9 +1,11 @@
 package edu.gatech.events;
 
+//import android.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract.Events;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,7 +21,7 @@ public class EventDetailActivity extends Activity {
         setTitle("Event details");
 
         event = getIntent().getParcelableExtra("Event");
-        //handles setting up the 
+        //handles setting up the menu
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(event.title);
         TextView time = (TextView) findViewById(R.id.time);
@@ -39,6 +41,7 @@ public class EventDetailActivity extends Activity {
 			public void onClick(View v) {
 				//Creates an intent that will allow the user to directly add the event into their
         		//google calendar.  It adds the title and location to their calendar event
+        		
 				Intent startCalendarIntent = new Intent(Intent.ACTION_INSERT);
 				startCalendarIntent.setType("vnd.android.cursor.item/event");
 				startCalendarIntent.putExtra(Events.TITLE, event.title);

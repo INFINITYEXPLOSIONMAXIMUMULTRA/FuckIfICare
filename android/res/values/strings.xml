@@ -5,5 +5,7 @@
         <item>Time</item>
         <item>Location</item>
     </string-array>
-    <string name="news">this is a menu</string>
+    <string name="resultFilter">Filter Results</string>
+    <string name="settingsNextHours">Show events for next hours</string>
+    <string name="seekBarDefault">0</string>
 </resources>
