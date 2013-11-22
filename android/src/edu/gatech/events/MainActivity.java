@@ -100,8 +100,9 @@ public class MainActivity extends Activity {
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                    Intent intent = new Intent(MainActivity.this, EventListActivity.class);
-                    startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, EventListActivity.class);
+                intent.putExtra("location", marker.getTitle());
+                startActivity(intent);
             }
         });
 
