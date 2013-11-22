@@ -29,10 +29,9 @@ public class AllEventsFragment extends ListFragment {
     List<Event> events;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-    	new WebserviceManager().execute("http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/12");
+    	new WebserviceManager().execute("http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/24");
         super.onActivityCreated(savedInstanceState);
         events = new ArrayList<Event>();
-        events.add(new Event("Build a Bear", "Tuesday 11:00 AM", "", ""));
         //the rest of the data is populated in the AsyncTask class specifically
         //in the onPostExecute function
     }
@@ -77,6 +76,7 @@ public class AllEventsFragment extends ListFragment {
 					Event tempEvent = new Event();
 					tempEvent.title = temp.getString("event_name");
 					tempEvent.time = temp.getString("start_date");
+                    //TODO time and date for time.
 					events.add(tempEvent);
 				}
 			} catch (JSONException e) {
