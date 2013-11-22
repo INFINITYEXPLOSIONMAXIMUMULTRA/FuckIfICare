@@ -194,6 +194,33 @@ def get_locations():
 	ret_dict['locations'] = events
 	return jsonify(ret_dict)
 
+@app.route('/api/v1.0/location/geteventbylocation/<string:location>')
+def get_event_by_location():
+	pass
+	#add description
+	#building
+
+@app.route('/api/v1.0/location/getnextnevents/<int:events>')
+def get_next_n_events(events):
+	results = session.query("event_name","date","start_time","end_time","name").\
+	from_statement("select e.event_name,e.date,e.start_time,e.end_time,l.name from event e left join location l on e.lid = l.id where \
+	 timestampdiff(HOUR,now(),concat(date,' ',start_time)) > 0 order by date asc,start_time asc limit "+str(events)).params().all()
+
+	ret_dict = {}
+	events = []
+	for location in results:
+		temp = {}
+		temp['event_name'] = location[0]#location is a tuple
+		temp['start_date'] = str(location[1])
+		temp['start_time'] = str(location[2])
+		temp['end_time'] = str(location[3])
+		temp['building'] = str(location[4])
+		events.append(temp)
+
+	ret_dict['events'] = events
+
+	return jsonify(ret_dict)
+
 
 if __name__ == "__main__":
 	app.run(debug=True)
