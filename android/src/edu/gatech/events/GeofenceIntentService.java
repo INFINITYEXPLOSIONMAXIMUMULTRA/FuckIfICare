@@ -1,6 +1,5 @@
 package edu.gatech.events;
 
-import android.*;
 import android.R;
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -8,22 +7,21 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.Locale;
 
 public class GeofenceIntentService extends IntentService {
     public GeofenceIntentService() {
@@ -91,6 +89,25 @@ public class GeofenceIntentService extends IntentService {
         builder.setContentTitle(event.title);
         builder.setContentText(event.location);
         builder.setContentIntent(notificationPendingIntent);
+        builder.setAutoCancel(true);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(event.description + "\n\n" + event.location));
+        Intent calendarIntent = null;
+        calendarIntent = new Intent(Intent.ACTION_INSERT);
+        calendarIntent.setData(CalendarContract.Events.CONTENT_URI);
+        calendarIntent.putExtra(CalendarContract.Events.TITLE, event.title);
+        calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.description);
+        calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.location);
+        //TODO event date sent to calendar
+        PendingIntent calendarPI = PendingIntent.getActivity(this, 0, calendarIntent, 0);
+        builder.addAction(R.drawable.stat_notify_error, "Add to Calendar", calendarPI);
+        Intent directionsIntent = null;
+        try {
+            directionsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.ENGLISH, "geo:0,0?q=%s", URLEncoder.encode(event.location, "UTF-8"))));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        PendingIntent directionsPI = PendingIntent.getActivity(this, 0, directionsIntent, 0);
+        builder.addAction(R.drawable.stat_notify_chat, "Get Directions", directionsPI);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
