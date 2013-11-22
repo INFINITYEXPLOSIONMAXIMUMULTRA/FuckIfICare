@@ -1,8 +1,11 @@
 package edu.gatech.events;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -10,6 +13,10 @@ import android.widget.TextView;
 public class SettingsActivity extends Activity{
 	
 	SeekBar numberOfHours = null;
+    CheckBox notifications = null;
+
+    public static final String PREFS_NAME = "settings";
+
 	//activity to handle the settings page to a user so they can set preferences
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,21 @@ public class SettingsActivity extends Activity{
 				
 			}
         	
+        });
+
+        notifications = (CheckBox)findViewById(R.id.checkBox);
+
+        notifications.setChecked(getSharedPreferences(PREFS_NAME, 0).getBoolean("notifWhenBusy", true));
+
+        notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean("notifWhenBusy", isChecked);
+
+                editor.commit();
+            }
         });
 	}
 }
