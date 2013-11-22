@@ -3,7 +3,9 @@ package edu.gatech.events;
 //import android.R;
 import android.app.*;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +18,16 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +36,8 @@ public class MainActivity extends Activity {
     GoogleMap map;
     MapFragment mapFragment;
     AllEventsFragment eventsFragment;
+    List<Location> buildings;
+    List<Geofence> geofenceList;
     /**
      * Called when the activity is first created.
      */
@@ -36,8 +49,9 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-        GeofenceHandler handler = new GeofenceHandler(this);
-        List<Geofence> geofenceList = new ArrayList<Geofence>();
+        buildings = new ArrayList<Location>();
+
+        geofenceList = new ArrayList<Geofence>();
         Geofence.Builder geofenceBuilder = new Geofence.Builder();
         geofenceBuilder.setRequestId("Phi Sigma Kappa");
         geofenceBuilder.setCircularRegion(33.777152, -84.391853, 200);
@@ -50,7 +64,7 @@ public class MainActivity extends Activity {
         geofenceBuilder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER);
         geofenceBuilder.setExpirationDuration(Geofence.NEVER_EXPIRE);
         geofenceList.add(geofenceBuilder.build());
-        handler.addGeofences(geofenceList);
+
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.event_view_list, android.R.layout.simple_spinner_dropdown_item);
         actionBar.setListNavigationCallbacks(spinnerAdapter, new ActionBar.OnNavigationListener() {
@@ -83,20 +97,16 @@ public class MainActivity extends Activity {
         eventsFragment = (AllEventsFragment) getFragmentManager().findFragmentById(R.id.events);
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         map = mapFragment.getMap();
-        final Marker studentCenter = map.addMarker(new MarkerOptions().position(new LatLng(33.773792, -84.398497)).title("Student Center").snippet("More fun that you can shake a stick at!"));
-        map.addMarker(new MarkerOptions().position(new LatLng(33.775322,-84.399114)).title("Ferst Center").snippet("Home of Drama Tech"));
-        map.addMarker(new MarkerOptions().position(new LatLng(33.775705, -84.404006)).title("Campus Recreation Center"));
-        map.addMarker(new MarkerOptions().position(new LatLng(33.772535,-84.392816)).title("Bobby Dood Stadium"));
-        map.addMarker(new MarkerOptions().position(new LatLng(33.780806,-84.392784)).title("McCamish Basketball Pavilion"));
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                if (marker.equals(studentCenter)) {
-                    Intent intent = new Intent(MainActivity.this, EventListActivity.class);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(MainActivity.this, EventListActivity.class);
+                intent.putExtra("location", marker.getTitle());
+                startActivity(intent);
             }
         });
+
+        new GetLocationsTask().execute();
 
     }
 
@@ -141,5 +151,93 @@ public class MainActivity extends Activity {
     	default:
     		return true;
     	}
+    }
+
+    private class GetLocationsTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            GeofenceHandler handler = new GeofenceHandler(MainActivity.this);
+            Geofence.Builder geofenceBuilder;
+            InputStream inStream = null;
+            try {
+                Log.d("Geofence", "getting locations");
+                URL downloadUrl = new URL("http://wesley-crusher.firba1.com:8080/api/v1.0/location/getlocations");
+                HttpURLConnection connect = (HttpURLConnection) downloadUrl.openConnection();
+                connect.setReadTimeout(10000);
+                connect.setConnectTimeout(15000);
+                connect.setRequestMethod("GET");
+
+                Log.d("Geofence", "parsing locations");
+                inStream = connect.getInputStream();
+                Reader read = new InputStreamReader(inStream, "UTF-8");
+
+                char [] buffers = new char[600];
+                read.read(buffers);
+                JSONObject json = new JSONObject(String.valueOf(buffers));
+                Log.d("Geofence", json.toString());
+                JSONArray eventArray = json.getJSONArray("locations");
+                for (int i = 0; i < eventArray.length(); i++) {
+                    buildings.add(new Location(eventArray.getString(i)));
+                    Log.d("Geofence", buildings.get(i).toString());
+                }
+                Log.d("Geofence", "done parsing locations");
+            } catch (Exception e) {
+                Log.e("Geofence", "failed to download stuff", e);
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+            }
+            for (Location building : buildings) {
+                geofenceBuilder = new Geofence.Builder();
+                geofenceBuilder.setRequestId(building.name);
+                try {
+                    String encodedName = building.name.replaceAll(" ", "%20");
+                    URL downloadUrl = new URL("http://wesley-crusher.firba1.com:8080/api/v1.0/location/nametocoordinates/" + encodedName);
+                    HttpURLConnection connect = (HttpURLConnection) downloadUrl.openConnection();
+                    connect.setReadTimeout(10000);
+                    connect.setConnectTimeout(15000);
+                    connect.setRequestMethod("GET");
+
+                    inStream = connect.getInputStream();
+                    Reader read = new InputStreamReader(inStream, "UTF-8");
+                    char [] buffers = new char[600];
+                    read.read(buffers);
+                    JSONObject json = new JSONObject(String.valueOf(buffers));
+                    Log.d("Geofence", json.toString());
+                    building.latitude = json.getDouble("latitude");
+                    building.longitude = json.getDouble("longitude");
+                    geofenceBuilder.setCircularRegion(building.latitude, building.longitude, 200);
+                    geofenceBuilder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER);
+                    geofenceBuilder.setExpirationDuration(Geofence.NEVER_EXPIRE);
+                    geofenceList.add(geofenceBuilder.build());
+                } catch (Exception e) {
+                    Log.e("Geofence", "failed to download stuff", e);
+                } finally {
+                    if (inStream != null) {
+                        try {
+                            inStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                    }
+                }
+            }
+            handler.addGeofences(geofenceList);
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            for (Location building : buildings) {
+                map.addMarker(new MarkerOptions().position(new LatLng(building.latitude, building.longitude)).title(building.name));
+            }
+        }
     }
 }
