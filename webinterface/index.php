@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"> 
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.png">
@@ -93,7 +93,7 @@
         var mapOptions = {
           scrollwheel: false,
           center: new google.maps.LatLng(33.777142, -84.397582),
-          zoom: 15,
+          zoom: 14,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var map = new google.maps.Map(document.getElementById("map-canvas"),
@@ -107,7 +107,7 @@
         var crc = new google.maps.Marker({
           position: new google.maps.LatLng(33.775646, -84.404174),
           map: map,
-          title:<?php echo json_encode($locationArray[1]); ?>
+          title:"Campus Recreation Center"
         });
         var bookstore = new google.maps.Marker({
           position: new google.maps.LatLng(33.77665, -84.388557),
@@ -128,13 +128,13 @@
     <div class="row">
       <div class="col-lg-12">
         <a name="events">
-          <h1>Upcoming Events</h1>
+          <h3>Upcoming Events</h3>
         </a>
       </div>
     </div>
     <div class="row">
       <div class="col-lg-4">
-        <h2>Today</h2>
+        <h4>Today</h4>
         <ul class="nav nav-pills nav-stacked">
           <?php
           $curl = curl_init();
@@ -156,7 +156,7 @@
         </ul>
       </div>
       <div class="col-lg-4">
-        <h2>Next 3 Days</h2>
+        <h4>Next 3 Days</h4>
         <ul class="nav nav-pills nav-stacked">
           <?php
           $curl = curl_init();
@@ -179,7 +179,7 @@
         </ul>
       </div>
       <div class="col-lg-4">
-        <h2>Next 7 Days</h2>
+        <h4>Next 7 Days</h4>
         <ul class="nav nav-pills nav-stacked">
           <?php
           $curl = curl_init();
@@ -203,13 +203,13 @@
     </div>
   </div>
 
-      <!-- FOOTER -->
+      <!-- FOOTER
       <footer>
         <p class="pull-right"><a href="#">Back to top</a></p>
         <p>&copy; 2013 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
       </footer>
 
-    </div><!-- /.container -->
+    </div>/.container -->
 
 
     <!-- Bootstrap core JavaScript
