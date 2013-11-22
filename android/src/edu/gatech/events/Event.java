@@ -8,7 +8,7 @@ import java.util.Date;
 public class Event implements Parcelable {
     public String title;
     public String description;
-    public String location;
+    public String location = "Student Center";
     public String/*Date*/ time;
 
     public Event() {}
