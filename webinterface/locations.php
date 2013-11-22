@@ -98,8 +98,9 @@
             $jsonobj->events = array_slice($jsonobj->events,0,5);
             if($jsonobj->events) {
               foreach($jsonobj->events as $event){
-              print "<li><strong>Event: </strong>" . $event->event_name . "</li>";
-              print "<li><strong>Date: </strong>" . $event->start_date . " from " . $event->start_time . " to " .$event->end_time . "</li>";
+                print "<li><strong>Event: </strong>" . $event->event_name . "</li>";
+                print "<li><strong>Date: </strong>" . $event->start_date . " from " . $event->start_time . " to " .$event->end_time . "</li>";
+                print "<li>-</li>";
               } 
             }
             else {
