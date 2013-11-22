@@ -47,14 +47,14 @@
                   <ul class="dropdown-menu">
 		  <?php
 			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL,"http://localhost:5000/api/v1.0/location/getlocations");
+			curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/getlocations");
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 			$json = curl_exec($curl);
 			curl_close($curl); 
 			$jsonobj = json_decode($json);
 			$locations = $jsonobj->locations;
 			foreach($locations as $location){
-				print "<li><a href=\"#\">".$location."</a></li>";
+				print "<li><a href=\"./locations.php?location=$location\">".$location."</a></li>";
 			}
 		  ?>
                   </ul>
@@ -67,6 +67,36 @@
       </div>
     </div>
 <!--Google Map with Markers-->
+    <script type="text/javascript">
+      function initialize() {
+        var mapOptions = {
+          scrollwheel: false,
+          center: new google.maps.LatLng(33.777142, -84.397582),
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+
+        var studentCenter = new google.maps.Marker({
+          position: new google.maps.LatLng(33.774203, -84.398839),
+          map: map,
+          title:"Student Center"
+        });
+        var crc = new google.maps.Marker({
+          position: new google.maps.LatLng(33.775646, -84.404174),
+          map: map,
+          title:"Campus Recreation Center"
+        });
+        var bookstore = new google.maps.Marker({
+          position: new google.maps.LatLng(33.77665, -84.388557),
+          map: map,
+          title:"Barnes & Noble Bookstore"
+        });
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
     <div class="google-map-canvas" id="map-canvas"> </div>
 <!--List of Upcoming Events by Time Frame-->
 
@@ -84,7 +114,7 @@
         <ul class="nav nav-pills nav-stacked">
           <?php
           $curl = curl_init();
-          curl_setopt($curl, CURLOPT_URL,"http://localhost:5000/api/v1.0/location/geteventsfornexthours/12");
+          curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/12");
           curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
           $json = curl_exec($curl);
           curl_close($curl); 
@@ -92,7 +122,7 @@
           $jsonobj->events = array_slice($jsonobj->events,0,3);
 
           foreach($jsonobj->events as $event) {
-            print "<li><a href=\"#\"><div>";
+            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
             print $event->event_name;
             print "</div>"; 
             print $event->start_date.' '.$event->start_time;
@@ -102,23 +132,48 @@
         </ul>
       </div>
       <div class="col-lg-4">
-        <h2>This Week</h2>
+        <h2>Next 3 Days</h2>
         <ul class="nav nav-pills nav-stacked">
-          <li>Event 1</li>
-          <li>Event 2</li>
-          <li>Event 3</li>
-          <li>Event 4</li>
+          <?php
+          $curl = curl_init();
+          curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/72");
+          curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+          $json = curl_exec($curl);
+          curl_close($curl); 
+          $jsonobj = json_decode($json);
+          $jsonobj->events = array_slice($jsonobj->events,0,3);
+
+          foreach($jsonobj->events as $event) {
+            $eventobj = json_encode($event);
+            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
+            print $event->event_name;
+            print "</div>"; 
+            print $event->start_date.' '.$event->start_time;
+            print "</a></li>";
+          }
+        ?>
         </ul>
       </div>
       <div class="col-lg-4">
-        <h2>This Month</h2>
+        <h2>Next 7 Days</h2>
         <ul class="nav nav-pills nav-stacked">
-          <li>Event 1</li>
-          <li>Event 2</li>
-          <li>Event 3</li>
-          <li>Event 4</li>
-          <li>Event 5</li>
-          <li>Event 6</li>
+          <?php
+          $curl = curl_init();
+          curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/168");
+          curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+          $json = curl_exec($curl);
+          curl_close($curl); 
+          $jsonobj = json_decode($json);
+          $jsonobj->events = array_slice($jsonobj->events,0,3);
+
+          foreach($jsonobj->events as $event) {
+            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
+            print $event->event_name;
+            print "</div>"; 
+            print $event->start_date.' '.$event->start_time;
+            print "</a></li>";
+          }
+        ?>
         </ul>
       </div>
     </div>

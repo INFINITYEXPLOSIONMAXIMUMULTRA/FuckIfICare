@@ -196,7 +196,7 @@ def get_locations():
 
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run(port=8080,host="0.0.0.0")
 
 ##todo webservice call to dump all location names
 ##all events within certain time frames
