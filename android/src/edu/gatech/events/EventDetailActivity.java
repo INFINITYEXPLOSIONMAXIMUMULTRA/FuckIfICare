@@ -3,12 +3,17 @@ package edu.gatech.events;
 //import android.R;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract.Events;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Locale;
 
 public class EventDetailActivity extends Activity {
 
@@ -27,7 +32,7 @@ public class EventDetailActivity extends Activity {
         TextView time = (TextView) findViewById(R.id.time);
         time.setText(event.time.toString());
         TextView location = (TextView) findViewById(R.id.location);
-        location.setText(event.location);
+        location.setText(event.location.name);
         TextView description = (TextView) findViewById(R.id.description);
         description.setText(event.description);
         
@@ -45,11 +50,25 @@ public class EventDetailActivity extends Activity {
 				Intent startCalendarIntent = new Intent(Intent.ACTION_INSERT);
 				startCalendarIntent.setType("vnd.android.cursor.item/event");
 				startCalendarIntent.putExtra(Events.TITLE, event.title);
-				startCalendarIntent.putExtra(Events.EVENT_LOCATION, event.location);
+				startCalendarIntent.putExtra(Events.EVENT_LOCATION, event.location.name);
 				startActivity(startCalendarIntent);
 				//TODO add the starting date to the calendar
 			}
 		});
+
+        Button findDirectinosButton = (Button)findViewById(R.id.findDirections);
+        findDirectinosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent directionsIntent = null;
+                try {
+                    directionsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.ENGLISH, "geo:0,0?q=%s", URLEncoder.encode(event.location.name, "UTF-8"))));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                startActivity(directionsIntent);
+            }
+        });
         
     }
 }

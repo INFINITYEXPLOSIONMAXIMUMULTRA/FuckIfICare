@@ -4,28 +4,21 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
+import java.util.Map;
 
 public class Event implements Parcelable {
     public String title;
-    public String description = "Placeholder Description";
-    public String location = "Student Center";
+    public String description;
+    public Location location = new Location("Student Center", 33.773385, -84.399235);
     public String/*Date*/ time;
 
     public Event() {}
 
-    public Event(String title, String time, String location, String description) {
+    public Event(String title, String time, Location location, String description) {
         this.title = title;
         this.time = time;
-        if (!description.equals("")) {
-            this.location = location;
-        } else {
-            this.location = "Student Center";
-        }
-        if (!description.equals("")) {
-            this.description = description;
-        } else {
-            this.description = "Placeholder description";
-        }
+        this.location = location;
+        this.description = description;
     }
 
     @Override
@@ -37,7 +30,7 @@ public class Event implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(title);
         parcel.writeString(description);
-        parcel.writeString(location);
+        parcel.writeParcelable(location, 0);
         parcel.writeString(time);
     }
 
@@ -47,7 +40,7 @@ public class Event implements Parcelable {
             Event event = new Event();
             event.title = parcel.readString();
             event.description = parcel.readString();
-            event.location = parcel.readString();
+            event.location = parcel.readParcelable(Location.class.getClassLoader());
             event.time = parcel.readString();
             return event;
         }
