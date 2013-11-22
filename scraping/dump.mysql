@@ -30,7 +30,7 @@ CREATE TABLE `event` (
   `end_time` time DEFAULT NULL,
   `start_time` time NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=424 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=527 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
-INSERT INTO `event` VALUES (367,4,'Faculty Panel: Open Access and the Digital Humanities','2013-10-25','16:00:00','15:00:00'),(370,12,'Buzz on Biotechnology High School Open House','2013-10-26','13:00:00','10:00:00'),(378,5,'Highlights of Key Business Databases','2013-10-28','14:30:00','13:15:00'),(379,5,'Data Management Planning','2013-10-28','16:00:00','15:00:00'),(380,3,'The Fermi Pasta Ulam (FPU) Problem and The Birth of Nonlinear Science ','2013-10-28','16:00:00','15:00:00'),(381,11,'HTS Speaker Series - Michael Gordin (Princeton)','2013-10-28','17:30:00','16:00:00'),(383,10,'The School of Modern Languages hosts The Atlanta Slavic Studies Seminar ','2013-10-28','18:30:00','17:00:00'),(384,8,'Spin-N-Screen','2013-10-28','20:00:00','17:30:00'),(385,7,'Soft matter, food and cooking','2013-10-28','19:00:00','18:00:00'),(386,9,'Tech Trivia','2013-10-28','20:00:00','18:00:00'),(395,7,'Extreme By Design film screening, panel and workshop!','2013-11-05','21:30:00','19:30:00'),(399,9,'2013 Annual Benefits Fair','2013-11-06','14:00:00','10:00:00'),(400,5,'Ramblin&#039; Reflections on Georgia Politics with Abit Massey','2013-11-06','12:00:00','11:00:00'),(401,5,'Abit Massey: &quot;Ramblin&#039; Reflections on Georgia Politics&quot;','2013-11-06','12:00:00','11:00:00'),(402,3,'The Symmetry of Chaos','2013-11-06','16:00:00','15:00:00'),(403,7,'Town Hall on Definition of &#039;Faculty&#039;','2013-11-06','16:00:00','15:00:00'),(408,12,'Bioengineering Seminar Series','2013-11-07','12:00:00','11:00:00'),(409,7,'Mind Matters: Using Psychology to Enhance Your Academic and Test Performance','2013-11-07','12:00:00','11:00:00'),(411,9,'Veterans On Campus Kick-Off Meeting','2013-11-07','13:00:00','12:00:00'),(417,9,'Open Enrollment Campus Information Session','2013-11-08','11:00:00','09:30:00'),(420,9,'Women&#039;s Leadership Conference','2013-11-09','00:00:00','00:00:00');
+INSERT INTO `event` VALUES (516,5,'MATLAB: Data Analysis and Visualization for Scientists and Engineers','2013-11-22','12:30:00','11:00:00'),(517,11,'School of Economics Seminar Series Presents Dr. Nick Muller','2013-11-22','15:30:00','14:00:00'),(518,5,'Basic Web Design: Using WordPress to Create an Online Presence','2013-11-22','16:30:00','15:00:00'),(522,4,'Software Engineering Seminar: Aws Albarghouthi, University of Toronto','2013-11-25','15:00:00','15:00:00'),(523,4,'SCS Distinguished Lecture: Jennifer Tour Chayes','2013-11-26','12:00:00','11:00:00'),(526,12,'Integrated Cancer Research Seminar Series','2013-11-26','17:00:00','16:00:00');
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,4 +110,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-04  9:37:37
+-- Dump completed on 2013-11-22  0:28:15
