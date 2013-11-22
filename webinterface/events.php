@@ -60,13 +60,6 @@
                       print "<li><a href=\"./locations.php?location=$location\">".$location."</a></li>";
                     }
                     ?>
-                    <!--<li><a href="./pages.php">Student Center</a></li>
-                    <li><a href="#">CRC</a></li>
-                    <li><a href="#">Barnes & Noble</a></li>-->
-                    <!--<li class="divider"></li>
-                    <li class="dropdown-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>-->
                   </ul>
                 </li>
                 <li><a href="./index.php#events">Upcoming Events</a></li>

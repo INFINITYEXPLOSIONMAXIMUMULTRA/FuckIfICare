@@ -83,7 +83,9 @@
     <div class="row">
       <div class="col-lg-12">
         <a name="events">
-          <?php print "<h1>Upcoming Events at ". htmlspecialchars($_GET['location']); ?>
+          <?php 
+            $currentLocation = htmlspecialchars($_GET['location']);
+            print "<h1>Upcoming Events at ". $currentLocation; ?>
         </a>
       </div>
     </div>
@@ -92,16 +94,48 @@
         <!--<h2>Today</h2>-->
         <ul class="nav nav-pills nav-stacked">
 
+          <li>-</li>
           <li><strong>Event</strong>: Hypnotist</li>
           <li><strong>Date</strong>: 11/6/2013 from 1 AM - 3 AM</li>
-          <li><strong>Description</strong>: Come out and be mesmerized by the illusions of a professional hynotist!</li>
+          <li><strong>Description</strong>: Come out and be mesmerized by the illusions of a professional hypnotist!</li>
           <li>-</li>
           <li><strong>Event</strong>: GT Dining Student Appreciation Night</li>
           <li><strong>Date</strong>: 11/7/2013 from 6 PM - 8 PM</li>
           <li><strong>Description</strong>: Come enjoy your favorite Student Center restaurants as they celebrate their favorite customers - you!</li>
         </ul>
       </div>
-      <div class="col-lg-12">
+      <div class="col-lg-6">
+        <!--Google Map with Markers-->
+        <script type="text/javascript">
+          function initialize() {
+            <?php
+              $curl = curl_init();
+              curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/nametocoordinates/" . rawurlencode($currentLocation));
+              curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+              $json = curl_exec($curl);
+              curl_close($curl); 
+              $jsonobj = json_decode($json);
+              $latitude = $jsonobj->latitude;
+              $longitude = $jsonobj->longitude;
+              ?>
+            var mapOptions = {
+              scrollwheel: false,
+              center: new google.maps.LatLng(<?php echo json_encode($latitude); ?>, <?php echo json_encode($longitude); ?>),
+              zoom: 15,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById("map-canvas1"),
+                mapOptions);
+
+            var crc = new google.maps.Marker({
+              position: new google.maps.LatLng(<?php echo json_encode($latitude); ?>, <?php echo json_encode($longitude); ?>),
+              map: map,
+              title:<?php echo json_encode($currentLocation); ?>
+            });
+          }
+          google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+
         <div class="google-map-canvas" id="map-canvas1"> </div>
       </div>
   </div>

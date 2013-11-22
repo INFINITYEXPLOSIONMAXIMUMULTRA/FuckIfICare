@@ -53,8 +53,19 @@
 			curl_close($curl); 
 			$jsonobj = json_decode($json);
 			$locations = $jsonobj->locations;
+      $i = 1;
+      $locationArray = array();
 			foreach($locations as $location){
-				print "<li><a href=\"./locations.php?location=$location\">".$location."</a></li>";
+        /*$curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/nametocoordinates/".$location);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $json = curl_exec($curl);
+        curl_close($curl); 
+        $jsonobj = json_decode($json);*/
+        $locationArray[i] = $location;
+        //$latitude = $jsonobj->latitude;
+				print "<li><a href=\"./locations.php?location=$location\">".$locationArray[i]."</a></li>";
+        $i++;
 			}
 		  ?>
                   </ul>
@@ -69,6 +80,16 @@
 <!--Google Map with Markers-->
     <script type="text/javascript">
       function initialize() {
+        <?php
+          $curl = curl_init();
+          curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/nametocoordinates/Library");
+          curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+          $json = curl_exec($curl);
+          curl_close($curl); 
+          $jsonobj = json_decode($json);
+          $latitude = $jsonobj->latitude;
+          $longitude = $jsonobj->longitude;
+          ?>
         var mapOptions = {
           scrollwheel: false,
           center: new google.maps.LatLng(33.777142, -84.397582),
@@ -79,20 +100,23 @@
             mapOptions);
 
         var studentCenter = new google.maps.Marker({
-          position: new google.maps.LatLng(33.774203, -84.398839),
+          position: new google.maps.LatLng(<?php echo json_encode($latitude); ?>, <?php echo json_encode($longitude); ?>),
           map: map,
           title:"Student Center"
         });
         var crc = new google.maps.Marker({
           position: new google.maps.LatLng(33.775646, -84.404174),
           map: map,
-          title:"Campus Recreation Center"
+          title:<?php echo json_encode($locationArray[1]); ?>
         });
         var bookstore = new google.maps.Marker({
           position: new google.maps.LatLng(33.77665, -84.388557),
           map: map,
           title:"Barnes & Noble Bookstore"
         });
+        /*google.maps.event.addListener(studentCenter, 'click', function() {
+          info
+        });*/
       }
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>

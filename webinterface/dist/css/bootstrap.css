@@ -42,6 +42,15 @@ video {
   width: 1140px;
 }
 
+#map-canvas1 {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 500px;
+  width: 500px;
+}
+
 audio:not([controls]) {
   display: none;
   height: 0;
