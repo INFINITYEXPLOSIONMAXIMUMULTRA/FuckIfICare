@@ -45,17 +45,17 @@
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Locations<b class="caret"></b></a>
                   <ul class="dropdown-menu">
-		  <?php
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/getlocations");
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			$json = curl_exec($curl);
-			curl_close($curl); 
-			$jsonobj = json_decode($json);
-			$locations = $jsonobj->locations;
+                  <?php
+                        $curl = curl_init();
+                        curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/getlocations");
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                        $json = curl_exec($curl);
+                        curl_close($curl); 
+                        $jsonobj = json_decode($json);
+                        $locations = $jsonobj->locations;
       $i = 1;
       $locationArray = array();
-			foreach($locations as $location){
+                        foreach($locations as $location){
         /*$curl = curl_init();
         curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/nametocoordinates/".$location);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -64,13 +64,14 @@
         $jsonobj = json_decode($json);*/
         $locationArray[i] = $location;
         //$latitude = $jsonobj->latitude;
-				print "<li><a href=\"./locations.php?location=$location\">".$locationArray[i]."</a></li>";
+                                print "<li><a href=\"./locations.php?location=$location\">".$locationArray[i]."</a></li>";
         $i++;
-			}
-		  ?>
+                        }
+                  ?>
                   </ul>
                 </li>
                 <li><a href="#events">Upcoming Events</a></li>
+                <li><a href="./add.php">Submit an Event</a></li>
               </ul>
             </div>
           </div>

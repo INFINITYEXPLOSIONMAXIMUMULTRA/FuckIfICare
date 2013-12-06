@@ -63,6 +63,7 @@
                   </ul>
                 </li>
                 <li><a href="./index.php#events">Upcoming Events</a></li>
+                <li><a href="./add.php">Submit an Event</a></li>
               </ul>
             </div>
           </div>
@@ -104,12 +105,6 @@
       
     </div>
   </div>
-
-      <!-- FOOTER -->
-      <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2013 TEAM INFINITY EXPLOSION MAXIMUM ULTRA</p>
-      </footer>
 
     </div><!-- /.container -->
 
