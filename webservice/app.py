@@ -194,6 +194,25 @@ def get_locations():
 	ret_dict['locations'] = events
 	return jsonify(ret_dict)
 
+@app.route('/api/v1.0/location/getlocationscoordinates')
+def get_locations_coordinates():
+	results = session.query("name","lat","lon").\
+	from_statement("select name,concat(cast(lat_deg as char),'.',lpad(lat_min,2,'0'),lpad(lat_sec,2,'0'),lpad(lat_micro,2,'0')) as lat, \
+	 concat('-',cast(lon_deg as char),'.',lpad(lon_min,2,'0'),lpad(lon_sec,2,'0'),lpad(lon_micro,2,'0')) as lon from location")\
+	.params().all()
+
+	ret_dict = {}
+	locations = []
+
+	for location in results:
+		temp = {}
+		temp['name']  = location[0]#name
+		temp['lat'] = location[1]#latitude
+		temp['lon'] = location[2]#longitude
+		locations.append(temp)
+	ret_dict['locations'] = locations
+	return jsonify(ret_dict)
+
 @app.route('/api/v1.0/location/geteventbylocation/<string:location>')
 def get_event_by_location(location):
 	results = session.query("event_name","date","start_time","end_time","name").\
