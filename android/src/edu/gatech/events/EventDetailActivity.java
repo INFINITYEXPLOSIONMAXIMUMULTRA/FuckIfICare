@@ -3,12 +3,17 @@ package edu.gatech.events;
 //import android.R;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract.Events;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Locale;
 
 public class EventDetailActivity extends Activity {
 
@@ -50,6 +55,20 @@ public class EventDetailActivity extends Activity {
 				//TODO add the starting date to the calendar
 			}
 		});
+
+        Button findDirectinosButton = (Button)findViewById(R.id.findDirections);
+        findDirectinosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent directionsIntent = null;
+                try {
+                    directionsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.ENGLISH, "geo:0,0?q=%s", URLEncoder.encode(event.getAddress(), "UTF-8"))));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                startActivity(directionsIntent);
+            }
+        });
         
     }
 }

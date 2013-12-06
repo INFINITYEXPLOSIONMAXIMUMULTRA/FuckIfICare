@@ -60,13 +60,6 @@
                       print "<li><a href=\"./locations.php?location=$location\">".$location."</a></li>";
                     }
                     ?>
-                    <!--<li><a href="./pages.php">Student Center</a></li>
-                    <li><a href="#">CRC</a></li>
-                    <li><a href="#">Barnes & Noble</a></li>-->
-                    <!--<li class="divider"></li>
-                    <li class="dropdown-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>-->
                   </ul>
                 </li>
                 <li><a href="./index.php#events">Upcoming Events</a></li>
@@ -81,12 +74,10 @@
 <!--Google Map with Markers-->
   <div class = "container">
     <div class="row">
-      <div class="col-lg-12">
-        <a name="events">
+      <div class="col-lg-6">
           <?php 
             $currentLocation = htmlspecialchars($_GET['location']);
-            print "<h1>Upcoming Events at ". $currentLocation; ?>
-        </a>
+            print "<h3>Upcoming Events at ". $currentLocation . "</h3>"; ?>
       </div>
     </div>
     <div class="row">
@@ -95,16 +86,51 @@
         <ul class="nav nav-pills nav-stacked">
 
           <li>-</li>
-          <li><strong>Event</strong>: Hypnotist</li>
-          <li><strong>Date</strong>: 11/6/2013 from 1 AM - 3 AM</li>
-          <li><strong>Description</strong>: Come out and be mesmerized by the illusions of a professional hypnotist!</li>
-          <li>-</li>
-          <li><strong>Event</strong>: GT Dining Student Appreciation Night</li>
-          <li><strong>Date</strong>: 11/7/2013 from 6 PM - 8 PM</li>
-          <li><strong>Description</strong>: Come enjoy your favorite Student Center restaurants as they celebrate their favorite customers - you!</li>
+
+          <?php
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventbylocation/" . rawurlencode($currentLocation));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $json = curl_exec($curl);
+            curl_close($curl); 
+            $jsonobj = json_decode($json);
+            $locations = $jsonobj->locations;
+            $jsonobj->events = array_slice($jsonobj->events,0,5);
+            if($jsonobj->events) {
+              foreach($jsonobj->events as $event){
+                print "<li><strong>Event: </strong>" . $event->event_name . "</li>";
+                print "<li><strong>Date: </strong>" . $event->start_date . " from " . $event->start_time . " to " .$event->end_time . "</li>";
+                print "<li>-</li>";
+              } 
+            }
+            else {
+              print "<li>No upcoming events at " . $currentLocation . "</li>";
+            }
+          ?>
+
+          
+
+          <?php
+            /*$curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/geteventsfornexthours/72");//geteventbylocation/" . rawurlencode($currentLocation));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $json = curl_exec($curl);
+            curl_close($curl); 
+            $jsonobj = json_decode($json);
+            $jsonobj->events = array_slice($jsonobj->events,0,5);
+
+            foreach($jsonobj->events as $event) {
+              $eventobj = json_encode($event);
+              print "<li><strong>Event: </strong>" . $event->event_name . "</li>";
+              print "<li><strong>Date: </strong>" . $event->start_date . " at " . $event->start_time . "</li>";
+              //print "</a></li>";
+            }*/
+          ?>
+
         </ul>
       </div>
-      <div class="col-lg-6">
+    </div>
+  </div>
         <!--Google Map with Markers-->
         <script type="text/javascript">
           function initialize() {
@@ -137,8 +163,6 @@
         </script>
 
         <div class="google-map-canvas" id="map-canvas1"> </div>
-      </div>
-  </div>
 
 <!--List of Upcoming Events by Time Frame-->
 
@@ -150,12 +174,10 @@
   </div>
 
       <!-- FOOTER -->
-      <!--<footer>
+      <footer>
         <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2013 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-      </footer>-->
-
-    </div><!-- /.container -->
+        <p>&copy; 2013 TEAM INFINITY EXPLOSION MAXIMUM ULTRA</p>
+      </footer>
 
 
     <!-- Bootstrap core JavaScript

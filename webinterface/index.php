@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"> 
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.png">
@@ -95,7 +95,7 @@
         var mapOptions = {
           scrollwheel: false,
           center: new google.maps.LatLng(33.777142, -84.397582),
-          zoom: 15,
+          zoom: 14,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById("map-canvas"),
@@ -175,13 +175,13 @@
     <div class="row">
       <div class="col-lg-12">
         <a name="events">
-          <h1>Upcoming Events</h1>
+          <h3>Upcoming Events</h3>
         </a>
       </div>
     </div>
     <div class="row">
       <div class="col-lg-4">
-        <h2>Today</h2>
+        <h4>Today</h4>
         <ul class="nav nav-pills nav-stacked">
           <?php
           $curl = curl_init();
@@ -190,20 +190,25 @@
           $json = curl_exec($curl);
           curl_close($curl); 
           $jsonobj = json_decode($json);
-          $jsonobj->events = array_slice($jsonobj->events,0,3);
+          $jsonobj->events = array_slice($jsonobj->events,0,5);
 
-          foreach($jsonobj->events as $event) {
-            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
-            print $event->event_name;
-            print "</div>"; 
-            print $event->start_date.' '.$event->start_time;
-            print "</a></li>";
+          if($jsonobj->events) {
+            foreach($jsonobj->events as $event) {
+              print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
+              print $event->event_name;
+              print "</div>"; 
+              print $event->start_date.' '.$event->start_time;
+              print "</a></li>";
+            }
+          }
+          else {
+            print "<li>No upcoming events</li>";
           }
         ?>
         </ul>
       </div>
       <div class="col-lg-4">
-        <h2>Next 3 Days</h2>
+        <h4>Next 3 Days</h4>
         <ul class="nav nav-pills nav-stacked">
           <?php
           $curl = curl_init();
@@ -212,21 +217,26 @@
           $json = curl_exec($curl);
           curl_close($curl); 
           $jsonobj = json_decode($json);
-          $jsonobj->events = array_slice($jsonobj->events,0,3);
+          $jsonobj->events = array_slice($jsonobj->events,0,5);
 
-          foreach($jsonobj->events as $event) {
-            $eventobj = json_encode($event);
-            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
-            print $event->event_name;
-            print "</div>"; 
-            print $event->start_date.' '.$event->start_time;
-            print "</a></li>";
+          if($jsonobj->events) {
+            foreach($jsonobj->events as $event) {
+              $eventobj = json_encode($event);
+              print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
+              print $event->event_name;
+              print "</div>"; 
+              print $event->start_date.' '.$event->start_time;
+              print "</a></li>";
+            }
+          }
+          else {
+            print "<li>No upcoming events</li>";
           }
         ?>
         </ul>
       </div>
       <div class="col-lg-4">
-        <h2>Next 7 Days</h2>
+        <h4>Next 7 Days</h4>
         <ul class="nav nav-pills nav-stacked">
           <?php
           $curl = curl_init();
@@ -235,14 +245,19 @@
           $json = curl_exec($curl);
           curl_close($curl); 
           $jsonobj = json_decode($json);
-          $jsonobj->events = array_slice($jsonobj->events,0,3);
+          $jsonobj->events = array_slice($jsonobj->events,0,5);
 
-          foreach($jsonobj->events as $event) {
-            print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
-            print $event->event_name;
-            print "</div>"; 
-            print $event->start_date.' '.$event->start_time;
-            print "</a></li>";
+          if($jsonobj->events) {
+            foreach($jsonobj->events as $event) {
+              print "<li><a href=\"./events.php?event=$event->event_name&startdate=$event->start_date&starttime=$event->start_time\"><div>";
+              print $event->event_name;
+              print "</div>"; 
+              print $event->start_date.' '.$event->start_time;
+              print "</a></li>";
+            }
+          }
+          else {
+            print "<li>No upcoming events</li>";
           }
         ?>
         </ul>
@@ -253,11 +268,8 @@
       <!-- FOOTER -->
       <footer>
         <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2013 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p>&copy; 2013 TEAM INFINITY EXPLOSION MAXIMUM ULTRA</p>
       </footer>
-
-    </div><!-- /.container -->
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

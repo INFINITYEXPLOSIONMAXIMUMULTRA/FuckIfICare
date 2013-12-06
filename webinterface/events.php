@@ -75,11 +75,9 @@
   <div class = "container">
     <div class="row">
       <div class="col-lg-12">
-        <a name="events">
           <?php
           	$eventName = htmlspecialchars($_GET['event']);
-          	print "<h1>" . $eventName . "</h1>"; ?>
-        </a>
+          	print "<h3>" . $eventName . "</h3>"; ?>
       </div>
     </div>
     <div class="row">
@@ -108,10 +106,10 @@
   </div>
 
       <!-- FOOTER -->
-      <!--<footer>
+      <footer>
         <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2013 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-      </footer>-->
+        <p>&copy; 2013 TEAM INFINITY EXPLOSION MAXIMUM ULTRA</p>
+      </footer>
 
     </div><!-- /.container -->
 

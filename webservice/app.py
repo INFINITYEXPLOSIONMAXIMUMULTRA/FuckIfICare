@@ -194,6 +194,69 @@ def get_locations():
 	ret_dict['locations'] = events
 	return jsonify(ret_dict)
 
+@app.route('/api/v1.0/location/getlocationscoordinates')
+def get_locations_coordinates():
+	results = session.query("name","lat","lon").\
+	from_statement("select name,concat(cast(lat_deg as char),'.',lpad(lat_min,2,'0'),lpad(lat_sec,2,'0'),lpad(lat_micro,2,'0')) as lat, \
+	 concat('-',cast(lon_deg as char),'.',lpad(lon_min,2,'0'),lpad(lon_sec,2,'0'),lpad(lon_micro,2,'0')) as lon from location")\
+	.params().all()
+
+	ret_dict = {}
+	locations = []
+
+	for location in results:
+		temp = {}
+		temp['name']  = location[0]#name
+		temp['lat'] = location[1]#latitude
+		temp['lon'] = location[2]#longitude
+		locations.append(temp)
+	ret_dict['locations'] = locations
+	return jsonify(ret_dict)
+
+@app.route('/api/v1.0/location/geteventbylocation/<string:location>')
+def get_event_by_location(location):
+	results = session.query("event_name","date","start_time","end_time","name").\
+	from_statement("select e.event_name,e.date,e.start_time,e.end_time,l.name from event e left join  \
+		location l on l.id=e.lid where l.name= :loc").params(loc = location).all()
+
+	ret_dict = {}
+	events = []
+	for location in results:
+		temp = {}
+		temp['event_name'] = location[0]#location is a tuple
+		temp['start_date'] = str(location[1])
+		temp['start_time'] = str(location[2])
+		temp['end_time'] = str(location[3])
+		temp['building'] = str(location[4])
+		events.append(temp)
+
+	ret_dict['events'] = events
+
+	return jsonify(ret_dict)
+	#add description
+	#building
+
+@app.route('/api/v1.0/location/getnextnevents/<int:events>')
+def get_next_n_events(events):
+	results = session.query("event_name","date","start_time","end_time","name").\
+	from_statement("select e.event_name,e.date,e.start_time,e.end_time,l.name from event e left join location l on e.lid = l.id where \
+	 timestampdiff(HOUR,now(),concat(date,' ',start_time)) > 0 order by date asc,start_time asc limit "+str(events)).params().all()
+
+	ret_dict = {}
+	events = []
+	for location in results:
+		temp = {}
+		temp['event_name'] = location[0]#location is a tuple
+		temp['start_date'] = str(location[1])
+		temp['start_time'] = str(location[2])
+		temp['end_time'] = str(location[3])
+		temp['building'] = str(location[4])
+		events.append(temp)
+
+	ret_dict['events'] = events
+
+	return jsonify(ret_dict)
+
 
 if __name__ == "__main__":
 	app.run(port=8080,host="0.0.0.0")

@@ -33,7 +33,7 @@
         <service android:name=".GeofenceIntentService"></service>
 	<meta-data
 		android:name="com.google.android.maps.v2.API_KEY"
-		android:value="AIzaSyAJHPterFhd0R7qc5wl_tmW81NGIDhxroI"
+		android:value="AIzaSyCvrqh7Fq0vrout-N3DVpbSGZTv7OdkjaI"
 	/>
     </application>
 </manifest>

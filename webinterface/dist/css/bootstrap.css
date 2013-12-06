@@ -33,13 +33,18 @@ video {
 
 /* Canvas for Google Map */
 
+body, html {
+  height: 100%;
+  width: 100%;
+}
+
 #map-canvas {
   margin-top: 25px;
   margin-bottom: 25px;
   margin-left: auto;
   margin-right: auto;
-  height: 500px;
-  width: 1140px;
+  height: 70%;
+  width: 90%;
 }
 
 #map-canvas1 {
@@ -47,8 +52,8 @@ video {
   margin-bottom: 25px;
   margin-left: auto;
   margin-right: auto;
-  height: 500px;
-  width: 500px;
+  height: 70%;
+  width: 90%;
 }
 
 audio:not([controls]) {
