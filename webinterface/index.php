@@ -101,21 +101,28 @@
         map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
 
-        var studentCenter = new google.maps.Marker({
-          position: new google.maps.LatLng(<?php echo json_encode($latitude); ?>, <?php echo json_encode($longitude); ?>),
-          map: map,
-          title:"Student Center"
-        });
-        var crc = new google.maps.Marker({
-          position: new google.maps.LatLng(33.775646, -84.404174),
-          map: map,
-          title:"Campus Recreation Center"
-        });
-        var bookstore = new google.maps.Marker({
-          position: new google.maps.LatLng(33.77665, -84.388557),
-          map: map,
-          title:"Barnes & Noble Bookstore"
-        });
+      <?php
+      $curl = curl_init();
+      curl_setopt($curl, CURLOPT_URL,"http://wesley-crusher.firba1.com:8080/api/v1.0/location/getlocationscoordinates");
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+      $json = curl_exec($curl);
+      curl_close($curl); 
+      $jsonobj = json_decode($json);
+      $locations = $jsonobj->locations;
+      $cnt = 1;
+      foreach($locations as $loc){
+        print "var location".$cnt." = new google.maps.Marker({\n";
+        print "  position: new google.maps.LatLng(".$loc->lat.", ".$loc->lon."),\n";
+        print "  map: map,\n";
+        print "  title: \"".$loc->name."\",\n";
+        print "  url: \"./locations.php?location=".$loc->name."\"\n";
+        print "});\n\n";
+        print "google.maps.event.addListener(location".$cnt.", 'click', function() {\n";
+        print "  window.location.href = location".$cnt.".url;\n";
+        print "});\n\n";
+        $cnt++;
+      }
+      ?>
 
         // Try HTML5 geolocation
         if(navigator.geolocation) {
